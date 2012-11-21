@@ -36,6 +36,8 @@ Puppet::Type.type(:keystone_user_role).provide(
     user_id, tenant_id = get_user_and_tenant
     resource[:roles].each do |role_name|
       role_id = self.class.get_roles[role_name]
+      # Ensure we are executing with non null args
+      next if ( ! user_id || ! tenant_id || ! role_id )
       auth_keystone(
         'user-role-add',
         '--user-id', user_id,
